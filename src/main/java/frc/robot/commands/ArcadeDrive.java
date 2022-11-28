@@ -5,13 +5,13 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.Drivetrain;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import java.util.function.Supplier;
+// import java.util.function.Supplier;
 
 public class ArcadeDrive extends CommandBase {
   private final Drivetrain m_drivetrain;
-  private final Supplier<Double> m_xaxisSpeedSupplier;
-  private final Supplier<Double> m_zaxisRotateSupplier;
+  private final XboxController m_controller;
 
   /**
    * Creates a new ArcadeDrive. This command will drive your robot according to the speed supplier
@@ -23,11 +23,9 @@ public class ArcadeDrive extends CommandBase {
    */
   public ArcadeDrive(
       Drivetrain drivetrain,
-      Supplier<Double> xaxisSpeedSupplier,
-      Supplier<Double> zaxisRotateSupplier) {
+      XboxController controller) {
     m_drivetrain = drivetrain;
-    m_xaxisSpeedSupplier = xaxisSpeedSupplier;
-    m_zaxisRotateSupplier = zaxisRotateSupplier;
+    m_controller = controller;
     addRequirements(drivetrain);
   }
 
@@ -38,7 +36,9 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.arcadeDrive(m_xaxisSpeedSupplier.get(), m_zaxisRotateSupplier.get());
+    double speed = m_controller.getLeftY();
+    double rotation = m_controller.getRightX();
+    m_drivetrain.arcadeDrive(speed, rotation);
   }
 
   // Called once the command ends or is interrupted.
